@@ -3,7 +3,8 @@
 }
 
 body {
-    background-image: url('./images/Clear.jpg');
+    background-image: url('./images/Fog.jpg');
+    background-size: cover;
     background-color: azure;
     display: flex;
     flex-direction: column;

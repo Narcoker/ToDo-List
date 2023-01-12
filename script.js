@@ -47,6 +47,7 @@ const deleteAll = function () {
         console.log(liList[i])
         liList[i].remove();
     }
+    saveItemsFn();
 }
 
 const saveItemsFn = function () {
@@ -76,17 +77,36 @@ if (savedTodoList) {
     }
 }
 
-const weatherSearch = function (position) {
+const weatherDataActive = function ({ location, weather }) {
+    const weatherMainList = [
+        'Clear',
+        'Clouds',
+        'Drizzle',
+        'Rain',
+        'Snow',
+        'Thunderstorm',
+    ]
+
+    weather = weatherMainList.includes(weather) ? weather : "Fog";
+    const locationNameTag = document.querySelector("#location-name-tag");
+    locationNameTag.textContent = location;
+    document.body.style.backgroundImage = `url('./images/${weather}.jpg')`;
+}
+
+const weatherSearch = function ({ latitude, longitude }) {
     const API_KEY = "8d038f1d2119f9ebfec10c51b8b75396";
-    const lat = position.latitude;
-    const lng = position.longitude;
-    const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&appid=${API_KEY}`;
+    const url = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${API_KEY}`;
     const openWeartherRes = fetch(url)
         .then((res) => {
             return res.json();
         })
         .then((json) => {
-            console.log(json.name, json.weather[0].description);
+            console.log(json.name, json.weather[0].main);
+            const weatherData = {
+                location: json.name,
+                weather: json.weather[0].main
+            }
+            weatherDataActive(weatherData)
         })
         .catch((err) => {
             console.error(err);
@@ -94,10 +114,11 @@ const weatherSearch = function (position) {
     // console.log(openWeartherRes)
 }
 
-const accessToGeo = function (position) {
+const accessToGeo = function ({ coords }) {
+    const { latitude, longitude } = coords;
     const positionObj = {
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude,
+        latitude,
+        longitude
     }
     weatherSearch(positionObj);
 }
