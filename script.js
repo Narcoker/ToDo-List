@@ -10,6 +10,10 @@ const createTodo = function () {
         newLi.classList.toggle('complete');
     });
 
+    newLi.addEventListener('dblclick', () => {
+        newLi.remove();
+    });
+
     newSpan.textContent = todoInput.value;
     newLi.appendChild(newBtn);
     newLi.appendChild(newSpan);
